@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5%v=p^#dwd9@9d&(ud7$0&*-l#lgpt-yx4m)_i4s!2t$=wxc4i'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-5%v=p^#dwd9@9d&(ud7$0&*-l#lgpt-yx4m)_i4s!2t$=wxc4i'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+import os
+
+DEBUG = os.environ.get("DEBUG", "False") =="True"
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS =["https://*.onrender.com",]
 
 
 # Application definition
@@ -73,25 +81,13 @@ WSGI_APPLICATION = 'ai_blog_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'qoveradmin',
-        'PASSWORD': 'Q-XD7W5gyxmh3ZK6M6M5XfeHq5Jwoe04',
-        'HOST': 'z2348f305-postgresql.cjphzppblykf.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
-        
-        
-    }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+   }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
